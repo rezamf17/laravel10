@@ -21,7 +21,7 @@ class ItemsController extends Controller
      */
     public function create()
     {
-        //
+        return view('items.AddList');
     }
 
     /**
@@ -29,7 +29,15 @@ class ItemsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // print_r($request->all());exit();
+        $request->validate([
+            'item_name' => 'required',
+            'quantity' => 'required|numeric',
+            'items_type' => 'required',
+            'item_description' => 'required',
+        ]);
+        Item::create($request->all());
+        return redirect()->route('items.index')->with('success', 'Item created successfully.');
     }
 
     /**
