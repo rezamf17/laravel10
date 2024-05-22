@@ -43,17 +43,17 @@ class ItemsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Item $item)
     {
-        //
+        return view('items.ViewList', compact('item'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Item $item)
     {
-        //
+        return view('items.EditList', compact('item'));
     }
 
     /**
@@ -61,14 +61,23 @@ class ItemsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $item = Item::find($id);
+        $request->validate([
+            'item_name' => 'required',
+            'quantity' => 'required|numeric',
+            'items_type' => 'required',
+            'item_description' => 'required',
+        ]);
+        Item::update($request->all());
+        return redirect()->route('items.index')->with('success', 'Item created successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Item $item)
     {
-        //
+        $item->delete();
+        return redirect()->route('items.index')->with('success', 'Item deleted successfully.');
     }
 }
